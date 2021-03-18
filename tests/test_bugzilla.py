@@ -381,3 +381,18 @@ def test_skip_because_of_ppc(testdir):
     """)
     result = testdir.runpytest(*BUGZILLA_ARGS)
     result.assert_outcomes(0, 1, 0)
+
+
+def test_skip_because_of_no_numa(testdir):
+    testdir.makeconftest(CONFTEST)
+    testdir.makepyfile("""
+        import os
+        import pytest
+
+        @pytest.mark.bugzilla({'1': {'no_numa': True}})
+        def test_new_bug_but_no_numa(self):
+            assert True
+    """)
+    result = testdir.runpytest(*BUGZILLA_ARGS)
+    result.assert_outcomes(0, 1, 0)
+
