@@ -395,4 +395,3 @@ def test_skip_because_of_no_numa(testdir):
     """)
     result = testdir.runpytest(*BUGZILLA_ARGS)
     result.assert_outcomes(0, 1, 0)
-
