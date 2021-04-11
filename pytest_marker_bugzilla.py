@@ -176,6 +176,9 @@ class BugzillaHooks(object):
     def _should_skip_due_to_ppc(self, item, is_ppc):
         return is_ppc is None or is_ppc is True
 
+    def _should_skip_due_to_no_numa_support(self, item, no_numa):
+        return no_numa is None or no_numa is True
+
     def _should_skip(self, item, bz_mark):
 
         is_ppc_affected = self._should_skip_due_to_ppc(
@@ -190,7 +193,11 @@ class BugzillaHooks(object):
             item, bz_mark.get('storage')
         )
 
-        if is_api_affected and is_storage_affected and is_ppc_affected:
+        is_numa_affected = self._should_skip_due_to_no_numa_support(
+            item, bz_mark.get('no_numa')
+        )
+
+        if is_api_affected and is_storage_affected and is_ppc_affected and is_numa_affected:
             return True
 
         return False
